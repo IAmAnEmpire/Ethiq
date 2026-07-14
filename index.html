@@ -192,6 +192,11 @@ button:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
 .trace li:not(:last-child)::after{content:"";position:absolute;left:10px;top:24px;bottom:2px;width:1.5px;background:var(--hairline)}
 .trace li b{color:var(--ink);font-weight:700}
 .trace li.final b{color:var(--gA)}
+.subrows{margin:10px 0 2px;border-top:1px solid var(--hairline)}
+.subrow{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:8px 0;border-bottom:1px solid var(--hairline);align-items:baseline}
+.subrow .sd{font-weight:700;color:var(--ink);font-size:0.86rem}
+.subrow .sv{font-family:var(--mono);font-size:0.82rem;color:var(--ink);text-align:right}
+.subrow .sr{grid-column:1 / -1;font-size:0.8rem;color:var(--ink-soft);line-height:1.35}
 
 .envrow{
   margin-top:14px;display:flex;align-items:center;justify-content:space-between;
@@ -406,6 +411,7 @@ const SOURCES = {
   wff:   {label:"Welfare Footprint Institute — pain-hours research", url:"https://welfarefootprint.org/research-projects/laying-hens/"},
   off:   {label:"Open Food Facts product record", url:"https://openfoodfacts.org"},
   poore: {label:"Poore & Nemecek 2018 / Green-Score (Agribalyse)", url:"https://world.openfoodfacts.org/green-score"},
+  est:   {label:"Ethiq structured estimate — Welfare Quality dimensions (not a measured figure)", url:"https://www.welfarequalitynetwork.net/"},
   ali:   {label:"Aquatic Life Institute — aquaculture welfare benchmark", url:"https://www.ali.fish/certifier-campaign-resources/benchmark-2025"},
 };
 
@@ -463,16 +469,27 @@ const EGG_CATEGORIES = [
 
 const ANIMAL_INGREDIENTS = ["milk","cream","whey","butter","cheese","lactose","casein","yogurt","egg","gelatin","honey","meat","chicken","pork","beef","lard","fish","anchovy","shrimp","lamb"];
 
+// Welfare Quality framework principles. Each species estimate is the sum of
+// four dimension sub-scores (each out of 25), so the total is transparent.
+const WELFARE_DIMS = ["Good feeding","Good housing","Good health","Appropriate behaviour"];
 const SPECIES_PRIORS = [
-  {s:12, sp:"chicken", n:"conventional broiler chicken", k:["chicken","poultry","poulet","pollo","huhn","frango"]},
-  {s:15, sp:"pig", n:"conventional pork", k:["pork","porc","ham","bacon","schwein","sausage","salami","chorizo","cerdo","prosciutto"]},
-  {s:28, sp:"cattle", n:"conventional beef", k:["beef","boeuf","veal","rind","carne-de-res","manzo"]},
-  {s:22, sp:"sheep", n:"conventional lamb", k:["lamb","mutton","agneau","cordero"]},
-  {s:35, sp:"dairy", n:"conventional dairy", k:["dairies","milk","cheese","yogurt","butter","cream","fromage","lait","leche","queso","milch"]},
-  {s:30, sp:"hen", n:"eggs, farming method unknown", k:["egg","oeuf","eier","huevo","uovo"]},
-  {s:10, sp:"fish", n:"farmed fish (welfare rarely audited)", k:["fish","salmon","trout","tuna","poisson","seafood","pescado","tilapia","pangasius"]},
-  {s:8,  sp:"shrimp", n:"farmed shrimp / prawns", k:["shrimp","prawn","crevette","gamba","langostino"]},
-];
+  {sp:"chicken", n:"conventional broiler chicken", k:["chicken","poultry","poulet","pollo","huhn","frango"],
+   dims:[8,2,1,1], why:["fed ad lib for fast growth","crowded indoor sheds","leg and heart disorders from rapid growth","barren pens, little natural behaviour"]},
+  {sp:"pig", n:"conventional pork", k:["pork","porc","ham","bacon","schwein","sausage","salami","chorizo","cerdo","prosciutto"],
+   dims:[8,2,3,2], why:["fed adequately","confinement, slatted floors","tail docking and teeth clipping","barren pens, limited rooting"]},
+  {sp:"cattle", n:"conventional beef", k:["beef","boeuf","veal","rind","carne-de-res","manzo"],
+   dims:[8,7,6,7], why:["fed adequately","mix of pasture and feedlot","castration and dehorning","some grazing behaviour"]},
+  {sp:"sheep", n:"conventional lamb", k:["lamb","mutton","agneau","cordero"],
+   dims:[7,7,4,4], why:["mostly pasture-fed","largely outdoor","tail docking, castration, exposure","fairly free to roam"]},
+  {sp:"dairy", n:"conventional dairy", k:["dairies","milk","cheese","yogurt","butter","cream","fromage","lait","leche","queso","milch"],
+   dims:[12,8,8,7], why:["generally well fed","increasingly indoor / zero-grazing","lameness, mastitis, repeated calving","calves removed early, some grazing"]},
+  {sp:"hen", n:"eggs, farming method unknown", k:["egg","oeuf","eier","huevo","uovo"],
+   dims:[9,6,7,8], why:["fed adequately","method unknown, may be caged","beak trimming, bone weakness","varies widely by system"]},
+  {sp:"fish", n:"farmed fish (welfare rarely audited)", k:["fish","salmon","trout","tuna","poisson","seafood","pescado","tilapia","pangasius"],
+   dims:[4,2,2,2], why:["feeding managed","crowding and water-quality stress","disease and parasites such as sea lice","behaviour rarely considered"]},
+  {sp:"shrimp", n:"farmed shrimp / prawns", k:["shrimp","prawn","crevette","gamba","langostino"],
+   dims:[3,2,1,2], why:["feeding managed","extreme stocking density","eyestalk ablation and disease","behaviour rarely considered"]},
+].map(x => ({...x, s: x.dims.reduce((a,b)=>a+b,0)}));
 
 const PAIN_NOTES = {
   hen: {intro:"Per hen, moving from a conventional cage to a cage-free aviary over her laying life prevents roughly:", tiers:[["Excruciating","near-zero either way"],["Disabling","275 hours prevented"],["Hurtful","2,313 hours prevented"],["Annoying","4,645 hours prevented"]], src:"wff"},
@@ -532,33 +549,46 @@ function computeScore(sig){
     if(e.t.some(t => eggStr.includes(t))){
       const cw = bestLabel(labels);
       const useCw = cw && cw.s > e.s;
-      trace.push({t:"Egg farming method", d:"Found \""+e.n+"\" → "+e.s+"/100."});
-      if(useCw) trace.push({t:"Higher label found", d:cw.n+" → "+cw.s+"/100, used instead."});
+      trace.push({t:"Egg farming method", d:"Detected \""+e.n+"\". The mandatory EU code (0–3) sets the score directly:", sub:[
+        ["Code 0 — organic","90/100"],
+        ["Code 1 — free-range","65/100"],
+        ["Code 2 — barn","35/100"],
+        ["Code 3 — caged","10/100"]
+      ]});
+      if(useCw) trace.push({t:"Higher label found", d:"This carton also carries \""+cw.n+"\" ("+cw.s+"/100), which is higher, so Ethiq uses that instead."});
       const score = useCw ? cw.s : e.s;
-      trace.push({t:"Final", d:"Welfare score "+score+"/100 → grade "+gradeFor(score).g+"."});
-      return {score, signal: useCw?cw.n:e.n, detail:"The egg farming-method code (0–3) is mandatory across the EU, UK and EEA and printed on the carton.", conf:"Based on labelling", pain:"hen", src: useCw?cw.src:"eureg", trace};
+      trace.push({t:"Final", d:score+"/100 → grade "+gradeFor(score).g+". "+(useCw?"Set by the detected label.":"Set by the mandatory EU egg code — the one welfare figure that is legally required, not estimated.")});
+      return {score, signal: useCw?cw.n:e.n, detail:"The egg farming-method code (0–3) is mandatory across the EU, UK and EEA and printed on every carton. The score above comes straight from that code.", conf:"Based on labelling", pain:"hen", src: useCw?cw.src:"eureg", trace};
     }
   }
 
-  // Layer 1: certification crosswalk
+  // Layer 1: certification crosswalk, shown as a placement on a welfare ladder
   const cw = bestLabel(labels);
   if(cw){
-    trace.push({t:"Welfare label", d:"Detected \""+cw.n+"\"."});
-    trace.push({t:"Crosswalk", d:"Published tier mapping → "+cw.s+"/100."});
-    trace.push({t:"Final", d:"Welfare score "+cw.s+"/100 → grade "+gradeFor(cw.s).g+"."});
-    return {score:cw.s, signal:cw.n, detail:"Score taken from a published crosswalk of welfare certification tiers.", conf:"Based on a detected label", pain: speciesHit?painKeyFor(speciesHit.sp):null, src:cw.src, trace};
+    trace.push({t:"Welfare label", d:"Detected \""+cw.n+"\" on the product."});
+    trace.push({t:"Placement", d:"Ethiq places each certification on a 0–100 welfare ladder drawn from published guides (AWI, CIWF, Consumer Reports). \""+cw.n+"\" sits at "+cw.s+"/100 on it:", sub:[
+      ["Highest — AWA, organic+, GAP 5","86–95"],
+      ["Higher — Beter Leven 2–3, Label Rouge, Haltungsform 4","70–85"],
+      ["Middle — free-range, RSPCA Assured, GAP 3","55–65"],
+      ["Basic — barn, Certified Humane, Haltungsform 2","35–50"],
+      ["Legal minimum — Red Tractor, caged, Haltungsform 1","10–30"]
+    ]});
+    trace.push({t:"Final", d:cw.s+"/100 → grade "+gradeFor(cw.s).g+". This is a sourced ranking of the label, not a measured figure for this exact farm."});
+    return {score:cw.s, signal:cw.n, detail:"This score is where the detected label sits on a published welfare ladder (shown in the calculation above). It reflects the certification standard, not an inspection of this specific product.", conf:"Based on a detected label", pain: speciesHit?painKeyFor(speciesHit.sp):null, src:cw.src, trace};
   }
 
-  // Layer 3: species prior
+  // Layer 3: species prior, shown as a transparent four-dimension estimate
   if(speciesHit){
-    trace.push({t:"Welfare label", d:"None detected."});
-    trace.push({t:"Fallback", d:"Using typical production system for "+speciesHit.sp+" → "+speciesHit.s+"/100."});
-    trace.push({t:"Final", d:"Welfare score "+speciesHit.s+"/100 → grade "+gradeFor(speciesHit.s).g+" (inferred)."});
-    return {score:speciesHit.s, signal:"No welfare label — assuming "+speciesHit.n, detail:"Without certification, the score reflects the typical global production system for this species. Treat it as a prior, not a verdict on this exact farm.", conf:"Inferred — no label detected", pain:painKeyFor(speciesHit.sp), src:"ciwf", trace};
+    const shown = speciesHit.sp==="hen" ? "eggs" : speciesHit.sp;
+    trace.push({t:"Welfare label", d:"None detected on the product."});
+    const sub = speciesHit.dims.map((v,i)=>[WELFARE_DIMS[i], v+"/25", speciesHit.why[i]]);
+    trace.push({t:"Estimate", d:"No label, so Ethiq estimates the typical "+shown+" system across the four Welfare Quality dimensions, each out of 25:", sub});
+    trace.push({t:"Final", d:speciesHit.dims.join(" + ")+" = "+speciesHit.s+"/100 → grade "+gradeFor(speciesHit.s).g+". This is a reasoned estimate, not a measured or certified figure."});
+    return {score:speciesHit.s, signal:"No welfare label — estimate for typical "+speciesHit.n, detail:"With no certification, this is a structured editorial estimate of the typical production system, broken down by welfare dimension above. It is not a measured value or a judgement of this specific farm.", conf:"Estimate — no label detected", pain:painKeyFor(speciesHit.sp), src:"est", trace};
   }
 
-  trace.push({t:"Final", d:"Animal ingredients present but system unknown → 30/100."});
-  return {score:30, signal:"Contains animal ingredients, system unknown", detail:"Animal-derived ingredients with no welfare label and no clear species.", conf:"Inferred — limited data", pain:null, src:"off", trace};
+  trace.push({t:"Final", d:"Animal ingredients present but species unclear → 30/100 (rough estimate)."});
+  return {score:30, signal:"Contains animal ingredients, system unknown", detail:"Animal-derived ingredients with no welfare label and no clear species. This is a rough estimate, not a measured figure.", conf:"Estimate — limited data", pain:null, src:"est", trace};
 }
 
 // Barcode path: OFF product → signals
@@ -714,9 +744,15 @@ function renderResult(r, meta){
 
   // Calculation trace
   const tl = $("traceList");
-  tl.innerHTML = (r.trace||[]).map(step =>
-    '<li class="'+(step.t==="Final"?"final":"")+'"><b>'+step.t+'.</b> '+step.d+'</li>'
-  ).join("");
+  tl.innerHTML = (r.trace||[]).map(step => {
+    let subHtml = "";
+    if(step.sub && step.sub.length){
+      subHtml = '<div class="subrows">'+step.sub.map(row =>
+        '<div class="subrow"><span class="sd">'+row[0]+'</span><span class="sv">'+row[1]+'</span>'+(row[2]?'<span class="sr">'+row[2]+'</span>':'')+'</div>'
+      ).join("")+'</div>';
+    }
+    return '<li class="'+(step.t==="Final"?"final":"")+'"><b>'+step.t+'.</b> '+step.d+subHtml+'</li>';
+  }).join("");
 
   if(r.pain && PAIN_NOTES[r.pain]){
     const pn = PAIN_NOTES[r.pain];
