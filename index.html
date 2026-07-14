@@ -10,48 +10,57 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650;9..144,900&family=Karla:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#F3F5EF;
-  --ink:#22301F;
-  --ink-soft:#4C5A46;
-  --hairline:#D8DECF;
-  --card:#FFFFFF;
-  --yolk:#F2B31B;
-  --gA:#2E7D4F; --gB:#6FA144; --gC:#DFA317; --gD:#D06A2A; --gE:#B4372F;
+  --paper:#ECEEE3;        /* eggshell with a green cast */
+  --paper-2:#E2E5D6;      /* deeper inset */
+  --ink:#1E2A18;          /* green-black ink */
+  --ink-soft:#576250;
+  --hairline:#D2D8C4;
+  --card:#FBFBF6;         /* warm shell white */
+  --yolk:#E4A011;         /* the one accent, used with restraint */
+  --yolk-deep:#C7860A;
+  --gA:#2F7A4C; --gB:#6E9C43; --gC:#D69A1C; --gD:#C9662A; --gE:#AE3730;
   --mono:'Space Mono',monospace;
+  --shadow:0 1px 2px rgba(30,42,24,.05), 0 8px 24px -16px rgba(30,42,24,.25);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{
-  background:var(--paper);
+  background:
+    radial-gradient(120% 80% at 50% -10%, #F1F3EA 0%, var(--paper) 55%) fixed;
   color:var(--ink);
   font-family:'Karla',system-ui,sans-serif;
   font-size:17px;line-height:1.55;
   min-height:100vh;
+  -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:640px;margin:0 auto;padding:0 20px 80px}
+.wrap{max-width:600px;margin:0 auto;padding:0 20px 88px}
 
 /* ---------- header ---------- */
-header{padding:44px 0 28px;text-align:left}
+header{padding:52px 0 24px;text-align:left}
+.eyebrow{
+  font-family:var(--mono);font-size:0.68rem;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--yolk-deep);margin-bottom:16px;
+}
 .brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
 .brand h1{
-  font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.4rem,8vw,3.4rem);
-  letter-spacing:-0.02em;line-height:1;
+  font-family:'Fraunces',serif;font-weight:900;font-size:clamp(2.7rem,9vw,3.8rem);
+  letter-spacing:-0.03em;line-height:0.95;font-optical-sizing:auto;
 }
-.brand h1 .egg{color:var(--yolk)}
-.tagline{font-size:1.02rem;color:var(--ink-soft);margin-top:10px;max-width:46ch}
+.brand h1 .egg{color:var(--yolk);font-style:italic}
+.tagline{font-size:1.05rem;color:var(--ink-soft);margin-top:14px;max-width:44ch;line-height:1.45}
 .stampline{
-  font-family:var(--mono);font-size:0.72rem;letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--ink-soft);margin-top:18px;display:flex;align-items:center;gap:10px;
+  font-family:var(--mono);font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--ink-soft);margin-top:22px;display:flex;align-items:center;gap:12px;
 }
 .stampline::before,.stampline::after{content:"";height:1px;background:var(--hairline);flex:1}
 
 /* ---------- scan card ---------- */
 .card{
-  background:var(--card);border:1px solid var(--hairline);border-radius:18px;
-  padding:22px;margin-top:18px;box-shadow:0 1px 0 rgba(34,48,31,0.04);
+  background:var(--card);border:1px solid var(--hairline);border-radius:16px;
+  padding:24px;margin-top:18px;box-shadow:var(--shadow);
 }
-.card h2{font-family:'Fraunces',serif;font-weight:650;font-size:1.25rem;margin-bottom:4px}
-.card .sub{color:var(--ink-soft);font-size:0.95rem;margin-bottom:16px}
+.card h2{font-family:'Fraunces',serif;font-weight:650;font-size:1.35rem;letter-spacing:-0.01em;margin-bottom:5px}
+.card .sub{color:var(--ink-soft);font-size:0.95rem;margin-bottom:18px;line-height:1.45}
 
 #reader{width:100%;border-radius:12px;overflow:hidden;background:#101510;display:none;margin-bottom:14px}
 #reader video{border-radius:12px}
@@ -60,14 +69,15 @@ header{padding:44px 0 28px;text-align:left}
 button{
   font-family:'Karla',sans-serif;font-weight:700;font-size:0.98rem;
   border:none;border-radius:999px;padding:13px 22px;cursor:pointer;
+
   transition:transform .08s ease, background .15s ease;
 }
 button:active{transform:scale(0.97)}
 button:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
-.btn-primary{background:var(--ink);color:var(--paper)}
-.btn-primary:hover{background:#31422C}
+.btn-primary{background:var(--ink);color:#F4F6EC;box-shadow:0 2px 8px -3px rgba(30,42,24,.5)}
+.btn-primary:hover{background:#2A3A22;transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
-.btn-ghost:hover{background:rgba(34,48,31,0.06)}
+.btn-ghost:hover{background:rgba(30,42,24,0.06)}
 
 .manual{display:flex;gap:10px;margin-top:14px}
 .manual input{
@@ -101,25 +111,39 @@ button:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
 .product-head .pbrand{color:var(--ink-soft);font-size:0.92rem;margin-top:3px}
 .product-head .pcode{font-family:var(--mono);font-size:0.75rem;color:var(--ink-soft);margin-top:5px;letter-spacing:0.06em}
 
-/* the signature: welfare grade as an egg stamp */
-.stamp-zone{display:flex;justify-content:center;padding:26px 0 10px}
+/* the signature: welfare grade as an inked rubber stamp */
+.stamp-zone{display:flex;justify-content:center;padding:30px 0 12px}
 .stamp{
   --stampcol:var(--gC);
-  border:2.5px dashed var(--stampcol);color:var(--stampcol);
-  border-radius:50%/44%;
-  padding:22px 34px;text-align:center;transform:rotate(-4deg);
+  position:relative;
+  border:2px solid var(--stampcol);color:var(--stampcol);
+  border-radius:50%/46%;
+  padding:26px 40px;text-align:center;transform:rotate(-5deg);
   font-family:var(--mono);
+  box-shadow:inset 0 0 0 4px var(--card), inset 0 0 0 5.5px var(--stampcol);
+  opacity:0.94;
+  animation:stampin .5s cubic-bezier(.2,1.3,.4,1) both;
 }
-.stamp .g{font-size:3.2rem;font-weight:700;line-height:1;letter-spacing:0.02em}
-.stamp .n{font-size:0.78rem;letter-spacing:0.16em;margin-top:6px;text-transform:uppercase}
-.scorebar{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--gE),var(--gD),var(--gC),var(--gB),var(--gA));position:relative;margin:14px 4px 6px}
-.scorebar .dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--card);border:3px solid var(--ink);transform:translate(-50%,-50%)}
-.scorelabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.68rem;color:var(--ink-soft);letter-spacing:0.1em;padding:0 4px}
+.stamp::after{
+  content:"";position:absolute;inset:7px;border-radius:50%/46%;
+  border:1px dotted var(--stampcol);opacity:0.3;pointer-events:none;
+}
+@keyframes stampin{
+  0%{opacity:0;transform:rotate(-5deg) scale(1.5)}
+  60%{opacity:0.94}
+  100%{opacity:0.94;transform:rotate(-5deg) scale(1)}
+}
+@media (prefers-reduced-motion:reduce){.stamp{animation:none}}
+.stamp .g{font-size:3.4rem;font-weight:700;line-height:1;letter-spacing:0.02em;font-family:'Fraunces',serif}
+.stamp .n{font-size:0.72rem;letter-spacing:0.18em;margin-top:7px;text-transform:uppercase}
+.scorebar{height:7px;border-radius:999px;background:linear-gradient(90deg,var(--gE),var(--gD),var(--gC),var(--gB),var(--gA));position:relative;margin:18px 4px 7px;opacity:0.85}
+.scorebar .dot{position:absolute;top:50%;width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--ink);transform:translate(-50%,-50%);box-shadow:0 1px 3px rgba(30,42,24,.3);transition:left .5s cubic-bezier(.2,.8,.3,1)}
+.scorelabels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:0.64rem;color:var(--ink-soft);letter-spacing:0.1em;padding:0 4px}
 
-.verdict{text-align:center;font-family:'Fraunces',serif;font-weight:650;font-size:1.15rem;margin-top:14px}
+.verdict{text-align:center;font-family:'Fraunces',serif;font-weight:650;font-size:1.3rem;letter-spacing:-0.01em;margin-top:16px}
 .confidence{
-  text-align:center;font-family:var(--mono);font-size:0.72rem;letter-spacing:0.12em;
-  text-transform:uppercase;color:var(--ink-soft);margin-top:6px;
+  text-align:center;font-family:var(--mono);font-size:0.68rem;letter-spacing:0.14em;
+  text-transform:uppercase;color:var(--ink-soft);margin-top:7px;
 }
 
 .signal{
@@ -139,6 +163,35 @@ button:focus-visible{outline:3px solid var(--yolk);outline-offset:2px}
 .pval{font-size:0.9rem;font-weight:700;color:var(--ink);text-align:right}
 .prov{margin-top:12px;font-size:0.78rem;color:var(--ink-soft);line-height:1.4}
 .prov a{color:var(--ink);text-decoration:underline}
+
+.altrow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+.alt-btn{
+  flex:1;min-width:140px;text-align:center;background:var(--paper);
+  border:1.5px dashed var(--hairline);border-radius:12px;padding:12px 14px;
+  font-family:'Karla',sans-serif;font-weight:700;font-size:0.9rem;color:var(--ink);cursor:pointer;
+}
+.alt-btn:hover{border-color:var(--ink)}
+.manualbox{display:none;margin-top:14px;padding:16px;background:var(--paper);border-radius:12px}
+.manualbox.open{display:block}
+.mb-lbl{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 6px}
+.manualbox select{
+  width:100%;padding:11px 12px;margin-bottom:14px;border:1.5px solid var(--hairline);
+  border-radius:10px;background:var(--card);color:var(--ink);font-family:'Karla',sans-serif;font-size:0.95rem;
+}
+.manualbox .btn-primary{width:100%}
+
+.trace{margin-top:16px;border:1px solid var(--hairline);border-radius:12px;padding:16px}
+.trace .pt{font-family:var(--mono);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink);margin-bottom:10px}
+.trace ol{list-style:none;counter-reset:step;padding:0;margin:0}
+.trace li{counter-increment:step;position:relative;padding:0 0 12px 34px;font-size:0.9rem;color:var(--ink-soft)}
+.trace li::before{
+  content:counter(step);position:absolute;left:0;top:0;width:22px;height:22px;
+  background:var(--ink);color:var(--paper);border-radius:50%;font-family:var(--mono);
+  font-size:0.72rem;display:flex;align-items:center;justify-content:center;
+}
+.trace li:not(:last-child)::after{content:"";position:absolute;left:10px;top:24px;bottom:2px;width:1.5px;background:var(--hairline)}
+.trace li b{color:var(--ink);font-weight:700}
+.trace li.final b{color:var(--gA)}
 
 .envrow{
   margin-top:14px;display:flex;align-items:center;justify-content:space-between;
@@ -171,6 +224,7 @@ footer a{color:var(--ink)}
 <div class="wrap">
 
 <header>
+  <div class="eyebrow">Humane grocery scanner</div>
   <div class="brand"><h1>Eth<span class="egg">iq</span></h1></div>
   <p class="tagline">Scan a supermarket barcode and see how the animals behind the product were treated. Welfare first, climate second, no averaging the two.</p>
   <div class="stampline">EU welfare labels · Open Food Facts · Welfare Footprint hours of pain</div>
@@ -178,7 +232,7 @@ footer a{color:var(--ink)}
 
 <div class="card">
   <h2>Scan a product</h2>
-  <p class="sub">Point your camera at any EAN or UPC barcode, or type the digits.</p>
+  <p class="sub">Three ways in: barcode, a photo of the label, or just tell Ethiq what it is.</p>
   <div id="reader" aria-label="Camera barcode scanner"></div>
   <div class="btnrow">
     <button class="btn-primary" id="startBtn">Start camera</button>
@@ -188,6 +242,48 @@ footer a{color:var(--ink)}
     <input id="codeInput" inputmode="numeric" placeholder="e.g. 3017624010701" aria-label="Barcode number">
     <button class="btn-ghost" id="lookupBtn">Look up</button>
   </div>
+
+  <div class="altrow">
+    <label class="alt-btn" for="photoInput">📷 Photograph the label</label>
+    <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
+    <button class="alt-btn" id="manualToggle" type="button">✎ No barcode? Tell Ethiq</button>
+  </div>
+
+  <div class="manualbox" id="manualBox">
+    <p class="mb-lbl">What is it?</p>
+    <select id="mSpecies">
+      <option value="hen">Eggs</option>
+      <option value="chicken">Chicken meat</option>
+      <option value="pig">Pork</option>
+      <option value="cattle">Beef</option>
+      <option value="sheep">Lamb</option>
+      <option value="dairy">Milk / cheese / dairy</option>
+      <option value="fish">Fish / seafood</option>
+      <option value="none">No animal ingredients</option>
+    </select>
+    <p class="mb-lbl">Any welfare label on the pack?</p>
+    <select id="mLabel">
+      <option value="">None / not sure</option>
+      <option value="__egg0">Egg code 0 — organic</option>
+      <option value="__egg1">Egg code 1 — free-range</option>
+      <option value="__egg2">Egg code 2 — barn</option>
+      <option value="__egg3">Egg code 3 — caged</option>
+      <option value="organic">Organic</option>
+      <option value="free-range">Free-range</option>
+      <option value="rspca-assured">RSPCA Assured</option>
+      <option value="certified-humane">Certified Humane</option>
+      <option value="animal-welfare-approved">Animal Welfare Approved</option>
+      <option value="label-rouge">Label Rouge</option>
+      <option value="beter-leven-2">Beter Leven 2 stars</option>
+      <option value="beter-leven-3">Beter Leven 3 stars</option>
+      <option value="global-animal-partnership">Global Animal Partnership</option>
+      <option value="asc-certified">ASC (seafood)</option>
+      <option value="msc-certified">MSC (seafood)</option>
+      <option value="red-tractor">Red Tractor</option>
+    </select>
+    <button class="btn-primary" id="manualGo" type="button">Grade it</button>
+  </div>
+
   <div class="samples">
     <p>Try a sample</p>
     <span class="chip" data-code="3017624010701">Nutella (dairy)</span>
@@ -222,6 +318,12 @@ footer a{color:var(--ink)}
   <div class="confidence" id="confidence"></div>
 
   <div class="signal" id="signal"></div>
+
+  <div class="trace" id="traceBox">
+    <div class="pt">How this grade was calculated</div>
+    <ol id="traceList"></ol>
+  </div>
+
   <div class="pain" id="pain" style="display:none">
     <div class="pt">What this choice means, in hours of pain</div>
     <div id="painBody"></div>
@@ -252,6 +354,8 @@ footer a{color:var(--ink)}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 /* ============================================================
    Ethiq scoring engine
@@ -260,6 +364,38 @@ footer a{color:var(--ink)}
    Layer 3: species priors (inferred)
    Vegan products: 100 by construction
    ============================================================ */
+
+/* ----- Optional scan logging (Supabase) -----
+   Paste your two values below. Leave them as-is to keep logging off;
+   the app works fully either way. Only product info is logged, never
+   anything about the person scanning. */
+const SUPABASE_URL = "YOUR_SUPABASE_URL";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+/* Optional AI vision proxy (Cloudflare Worker URL). Leave as-is to use
+   on-device label reading instead. When set, the photo button identifies
+   the actual product via Gemini through your key-protected proxy. */
+const VISION_PROXY_URL = "YOUR_WORKER_URL";
+let sb = null;
+try{
+  if(SUPABASE_URL.startsWith("https://") && window.supabase){
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  }
+}catch(e){ sb = null; }
+
+async function logScan(code, product, result){
+  if(!sb) return; // logging stays off until configured
+  try{
+    await sb.from("scans").insert({
+      barcode: code,
+      product_name: product ? (product.product_name || null) : null,
+      score: result ? result.score : null,
+      grade: result ? gradeFor(result.score).g : null,
+      found: !!product
+    });
+  }catch(e){ /* never let logging break a scan */ }
+}
+
 
 /* Source keys used across every grade for full provenance */
 const SOURCES = {
@@ -270,6 +406,7 @@ const SOURCES = {
   wff:   {label:"Welfare Footprint Institute — pain-hours research", url:"https://welfarefootprint.org/research-projects/laying-hens/"},
   off:   {label:"Open Food Facts product record", url:"https://openfoodfacts.org"},
   poore: {label:"Poore & Nemecek 2018 / Green-Score (Agribalyse)", url:"https://world.openfoodfacts.org/green-score"},
+  ali:   {label:"Aquatic Life Institute — aquaculture welfare benchmark", url:"https://www.ali.fish/certifier-campaign-resources/benchmark-2025"},
 };
 
 const LABEL_CROSSWALK = [
@@ -305,6 +442,16 @@ const LABEL_CROSSWALK = [
   {s:25, n:"Red Tractor (legal minimum baseline)", t:["red-tractor"], src:"ciwf"},
   {s:15, n:"Haltungsform 1 (legal minimum)", t:["haltungsform-stufe-1","haltungsform-1"], src:"ciwf"},
   {s:10, n:"Caged hens (enriched cage)", t:["eggs-from-caged-hens","kafighaltung","cage-eggs"], src:"awi"},
+  // ----- Non-EU and global schemes -----
+  {s:92, n:"Regenerative Organic Certified", t:["regenerative-organic"], src:"awi"},
+  {s:85, n:"RSPCA Approved (Australia)", t:["rspca-approved"], src:"ciwf"},
+  {s:80, n:"Certified Humane Pasture-Raised", t:["pasture-raised","pastured"], src:"aspca"},
+  {s:78, n:"BC SPCA Certified (Canada)", t:["spca-certified"], src:"aspca"},
+  {s:70, n:"ASC (farmed seafood welfare)", t:["asc-certified","asc-aquaculture","aquaculture-stewardship"], src:"ali"},
+  {s:55, n:"MSC (wild-caught, sustainability)", t:["msc-certified","sustainable-seafood","marine-stewardship"], src:"ali"},
+  {s:45, n:"Best Aquaculture Practices", t:["best-aquaculture-practices","bap-certified"], src:"ali"},
+  {s:40, n:"GlobalG.A.P. (baseline assurance)", t:["globalg-a-p","globalgap"], src:"ciwf"},
+  {s:30, n:"American Humane Certified (weak)", t:["american-humane"], src:"awi"},
 ];
 
 const EGG_CATEGORIES = [
@@ -317,14 +464,14 @@ const EGG_CATEGORIES = [
 const ANIMAL_INGREDIENTS = ["milk","cream","whey","butter","cheese","lactose","casein","yogurt","egg","gelatin","honey","meat","chicken","pork","beef","lard","fish","anchovy","shrimp","lamb"];
 
 const SPECIES_PRIORS = [
-  {s:12, sp:"chicken", n:"conventional broiler chicken", k:["chicken","poultry","poulet"]},
-  {s:15, sp:"pig", n:"conventional pork", k:["pork","porc","ham","bacon","schwein","sausage","salami","chorizo"]},
-  {s:28, sp:"cattle", n:"conventional beef", k:["beef","boeuf","veal","rind"]},
-  {s:22, sp:"sheep", n:"conventional lamb", k:["lamb","mutton","agneau"]},
-  {s:35, sp:"dairy", n:"conventional dairy", k:["dairies","milk","cheese","yogurt","butter","cream","fromage","lait"]},
-  {s:30, sp:"hen", n:"eggs, farming method unknown", k:["egg","oeuf","eier"]},
-  {s:10, sp:"fish", n:"farmed fish (welfare rarely audited)", k:["fish","salmon","trout","tuna","poisson","seafood"]},
-  {s:8,  sp:"shrimp", n:"farmed shrimp / prawns", k:["shrimp","prawn","crevette"]},
+  {s:12, sp:"chicken", n:"conventional broiler chicken", k:["chicken","poultry","poulet","pollo","huhn","frango"]},
+  {s:15, sp:"pig", n:"conventional pork", k:["pork","porc","ham","bacon","schwein","sausage","salami","chorizo","cerdo","prosciutto"]},
+  {s:28, sp:"cattle", n:"conventional beef", k:["beef","boeuf","veal","rind","carne-de-res","manzo"]},
+  {s:22, sp:"sheep", n:"conventional lamb", k:["lamb","mutton","agneau","cordero"]},
+  {s:35, sp:"dairy", n:"conventional dairy", k:["dairies","milk","cheese","yogurt","butter","cream","fromage","lait","leche","queso","milch"]},
+  {s:30, sp:"hen", n:"eggs, farming method unknown", k:["egg","oeuf","eier","huevo","uovo"]},
+  {s:10, sp:"fish", n:"farmed fish (welfare rarely audited)", k:["fish","salmon","trout","tuna","poisson","seafood","pescado","tilapia","pangasius"]},
+  {s:8,  sp:"shrimp", n:"farmed shrimp / prawns", k:["shrimp","prawn","crevette","gamba","langostino"]},
 ];
 
 const PAIN_NOTES = {
@@ -342,57 +489,145 @@ function gradeFor(score){
   return {g:"E", c:"var(--gE)", v:"Lowest-welfare system"};
 }
 
-function scoreProduct(p){
-  const labels = (p.labels_tags||[]).join("|").toLowerCase();
-  const cats = (p.categories_tags||[]).map(c=>c.toLowerCase());
-  const catStr = cats.join("|");
-  const analysisTags = p.ingredients_analysis_tags||[];
-  const ingr = (p.ingredients_tags||[]).join("|").toLowerCase();
+/* Shared scorer. Takes normalized signals, returns score + calculation trace.
+   signals = {labelsStr, catStr, ingr, isVegan, isNonVegan, source, method} */
+function computeScore(sig){
+  const trace = [];
+  const labels = (sig.labelsStr||"").toLowerCase();
+  const catStr = (sig.catStr||"").toLowerCase();
+  const ingr = (sig.ingr||"").toLowerCase();
+  const hay = labels+"|"+catStr+"|"+ingr;
 
-  // Vegan → 100 by construction (exact tag, not substring)
-  if(analysisTags.includes("en:vegan")){
-    return {score:100, signal:"No animal ingredients detected", detail:"Plant-based products score 100 by construction: no farmed animal was involved.", conf:"Certified by ingredient analysis", pain:null, src:"off"};
+  trace.push({t:"Input", d:sig.method});
+
+  // Vegan → 100
+  if(sig.isVegan){
+    trace.push({t:"Animal ingredients", d:"None — flagged plant-based."});
+    trace.push({t:"Rule applied", d:"No farmed animal involved → 100 by construction."});
+    return {score:100, signal:"No animal ingredients", detail:"Plant-based products score 100 by construction.", conf:"Based on ingredient data", pain:null, src:"off", trace};
   }
 
-  // Detect animal involvement: categories first, then ingredient list
-  let speciesHit = SPECIES_PRIORS.find(sp => sp.k.some(k => catStr.includes(k)));
-  if(!speciesHit && ingr){
-    speciesHit = SPECIES_PRIORS.find(sp => sp.k.some(k => ingr.includes(k)));
-    if(!speciesHit && ANIMAL_INGREDIENTS.some(k => ingr.includes(k))){
-      speciesHit = SPECIES_PRIORS.find(sp => sp.sp==="dairy"); // most common hidden animal ingredient
-    }
+  // Detect species (eggs take priority over chicken-meat when egg terms present)
+  let speciesHit = null;
+  if(/egg|oeuf|eier|huevo|uovo/.test(catStr) || /egg|oeuf|eier|huevo|uovo/.test(ingr)){
+    speciesHit = SPECIES_PRIORS.find(sp => sp.sp==="hen");
   }
-  const nonVegan = analysisTags.includes("en:non-vegan");
-  if(!speciesHit && !nonVegan){
-    return {score:100, signal:"No animal ingredients found in this product's data", detail:"Nothing in the categories or ingredient list points to animal farming. If that looks wrong, the Open Food Facts entry may be incomplete.", conf:"Inferred from product data", pain:null, src:"off"};
+  if(!speciesHit) speciesHit = SPECIES_PRIORS.find(sp => sp.k.some(k => catStr.includes(k)));
+  if(!speciesHit) speciesHit = SPECIES_PRIORS.find(sp => sp.k.some(k => ingr.includes(k)));
+  if(!speciesHit && ANIMAL_INGREDIENTS.some(k => ingr.includes(k))){
+    speciesHit = SPECIES_PRIORS.find(sp => sp.sp==="dairy");
+  }
+  if(speciesHit){
+    const shown = speciesHit.sp==="hen" ? "eggs" : speciesHit.sp;
+    trace.push({t:"Animal detected", d:"Matched \""+shown+"\" from product data."});
+  } else if(!sig.isNonVegan){
+    trace.push({t:"Animal ingredients", d:"None found in the data."});
+    trace.push({t:"Rule applied", d:"No animal farming detected → 100."});
+    return {score:100, signal:"No animal ingredients found", detail:"Nothing in the data points to animal farming. The record may be incomplete.", conf:"Inferred from available data", pain:null, src:"off", trace};
   }
 
-  // Layer 2: EU egg farming-method signals in categories OR labels (most precise)
+  // Layer 2: egg farming-method
   const eggStr = catStr+"|"+labels;
   for(const e of EGG_CATEGORIES){
     if(e.t.some(t => eggStr.includes(t))){
       const cw = bestLabel(labels);
-      const score = cw && cw.s > e.s ? cw.s : e.s;
-      const name = cw && cw.s > e.s ? cw.n : e.n;
-      const src = cw && cw.s > e.s ? cw.src : "eureg";
-      return {score, signal:name, detail:"The EU farming-method code (0–3) is stamped on every egg and printed on the carton. It is the only mandatory welfare label in the European food system.", conf:"Certified — mandatory EU labelling", pain:"hen", src};
+      const useCw = cw && cw.s > e.s;
+      trace.push({t:"Egg farming method", d:"Found \""+e.n+"\" → "+e.s+"/100."});
+      if(useCw) trace.push({t:"Higher label found", d:cw.n+" → "+cw.s+"/100, used instead."});
+      const score = useCw ? cw.s : e.s;
+      trace.push({t:"Final", d:"Welfare score "+score+"/100 → grade "+gradeFor(score).g+"."});
+      return {score, signal: useCw?cw.n:e.n, detail:"The egg farming-method code (0–3) is mandatory across the EU, UK and EEA and printed on the carton.", conf:"Based on labelling", pain:"hen", src: useCw?cw.src:"eureg", trace};
     }
   }
 
   // Layer 1: certification crosswalk
   const cw = bestLabel(labels);
   if(cw){
-    const painKey = speciesHit ? painKeyFor(speciesHit.sp) : null;
-    return {score:cw.s, signal:cw.n, detail:"Score taken from a published crosswalk of welfare certification tiers.", conf:"Certified — label detected", pain:painKey, src:cw.src};
+    trace.push({t:"Welfare label", d:"Detected \""+cw.n+"\"."});
+    trace.push({t:"Crosswalk", d:"Published tier mapping → "+cw.s+"/100."});
+    trace.push({t:"Final", d:"Welfare score "+cw.s+"/100 → grade "+gradeFor(cw.s).g+"."});
+    return {score:cw.s, signal:cw.n, detail:"Score taken from a published crosswalk of welfare certification tiers.", conf:"Based on a detected label", pain: speciesHit?painKeyFor(speciesHit.sp):null, src:cw.src, trace};
   }
 
   // Layer 3: species prior
   if(speciesHit){
-    return {score:speciesHit.s, signal:"No welfare label found — assuming "+speciesHit.n, detail:"Without certification, the score reflects the typical production system for this species in Europe. Treat it as a prior, not a verdict on this exact farm.", conf:"Inferred — no certification detected", pain:painKeyFor(speciesHit.sp), src:"ciwf"};
+    trace.push({t:"Welfare label", d:"None detected."});
+    trace.push({t:"Fallback", d:"Using typical production system for "+speciesHit.sp+" → "+speciesHit.s+"/100."});
+    trace.push({t:"Final", d:"Welfare score "+speciesHit.s+"/100 → grade "+gradeFor(speciesHit.s).g+" (inferred)."});
+    return {score:speciesHit.s, signal:"No welfare label — assuming "+speciesHit.n, detail:"Without certification, the score reflects the typical global production system for this species. Treat it as a prior, not a verdict on this exact farm.", conf:"Inferred — no label detected", pain:painKeyFor(speciesHit.sp), src:"ciwf", trace};
   }
 
-  // Non-vegan but species unknown
-  return {score:30, signal:"Contains animal ingredients, farming system unknown", detail:"The product contains animal-derived ingredients but carries no welfare certification and no clear species category.", conf:"Inferred — limited data", pain:null, src:"off"};
+  trace.push({t:"Final", d:"Animal ingredients present but system unknown → 30/100."});
+  return {score:30, signal:"Contains animal ingredients, system unknown", detail:"Animal-derived ingredients with no welfare label and no clear species.", conf:"Inferred — limited data", pain:null, src:"off", trace};
+}
+
+// Barcode path: OFF product → signals
+function scoreProduct(p){
+  const analysisTags = p.ingredients_analysis_tags||[];
+  return computeScore({
+    labelsStr: (p.labels_tags||[]).join("|"),
+    catStr: (p.categories_tags||[]).join("|"),
+    ingr: (p.ingredients_tags||[]).join("|"),
+    isVegan: analysisTags.includes("en:vegan"),
+    isNonVegan: analysisTags.includes("en:non-vegan"),
+    method: "Barcode → Open Food Facts product record."
+  });
+}
+
+// Photo/OCR path: raw text → signals
+function scoreFromText(text){
+  const low = " "+text.toLowerCase().replace(/[^a-z0-9\s]/g," ")+" ";
+  // Map plain-English label words to crosswalk tags
+  const map = [
+    ["organic","organic"],["biologique","organic"],["bio ","organic"],
+    ["free range","free-range"],["free-range","free-range"],["plein air","free-range"],
+    ["barn","barn-eggs"],["cage free","cage-free"],["cage-free","cage-free"],
+    ["caged","cage-eggs"],["from caged","cage-eggs"],
+    ["rspca","rspca-assured"],["certified humane","certified-humane"],
+    ["pasture raised","pasture-raised"],["pasture-raised","pasture-raised"],
+    ["animal welfare approved","animal-welfare-approved"],["greener world","a-greener-world"],
+    ["label rouge","label-rouge"],["beter leven","beter-leven"],
+    ["soil association","soil-association"],["demeter","demeter"],["naturland","naturland"],
+    ["red tractor","red-tractor"],["global animal partnership","global-animal-partnership"],
+    ["step 4","gap-step-4"],["step 5","gap-step-5"],["step 3","gap-step-3"],
+    ["msc","msc-certified"],["asc","asc-certified"],["regenerative organic","regenerative-organic"],
+  ];
+  let tags = [];
+  map.forEach(([word,tag])=>{ if(low.includes(" "+word) || low.includes(word+" ")) tags.push("en:"+tag); });
+  const isVegan = low.includes("vegan") || low.includes("plant based") || low.includes("plant-based");
+  // crude species detection from the text itself
+  let catWords = [];
+  SPECIES_PRIORS.forEach(sp=> sp.k.forEach(k=>{ if(low.includes(k)) catWords.push(k); }));
+  return computeScore({
+    labelsStr: tags.join("|"),
+    catStr: catWords.join("|"),
+    ingr: catWords.join("|"),
+    isVegan,
+    isNonVegan: catWords.length>0,
+    method: "Photo of the label → text read on packaging."
+  });
+}
+
+// Manual path: user picks species + label
+function scoreFromManual(speciesKey, labelTag){
+  const sp = SPECIES_PRIORS.find(s=>s.sp===speciesKey);
+  // Egg-code shortcuts map straight to the egg categories
+  const eggMap = {"__egg0":"organic-chicken-eggs","__egg1":"free-range-chicken-eggs","__egg2":"barn-chicken-eggs","__egg3":"cage-chicken-eggs"};
+  let catStr = sp ? sp.k[0] : "";
+  let labelsStr = "";
+  if(labelTag && eggMap[labelTag]){
+    catStr = "chicken-eggs|"+eggMap[labelTag];
+  } else if(labelTag){
+    labelsStr = "en:"+labelTag;
+  }
+  return computeScore({
+    labelsStr,
+    catStr,
+    ingr: sp ? sp.k[0] : "",
+    isVegan: speciesKey==="none",
+    isNonVegan: speciesKey!=="none",
+    method: "Manual entry — you told Ethiq what it is."
+  });
 }
 
 function bestLabel(labels){
@@ -430,6 +665,7 @@ async function lookup(code){
     const data = await res.json();
     $("status").style.display="none";
     if(!data || data.status===0 || !data.product){
+      logScan(code, null, null);
       showErr('Product not found in Open Food Facts. You can <a href="https://world.openfoodfacts.org/cgi/product.pl?code='+code+'" target="_blank" rel="noopener">add it in two minutes</a> — photos of the front and the label are enough.');
       return;
     }
@@ -446,14 +682,24 @@ function showErr(html){
 
 function render(code, p){
   const r = scoreProduct(p);
-  const g = gradeFor(r.score);
-
-  $("pname").textContent = p.product_name || "Unnamed product";
-  $("pbrand").textContent = p.brands || "";
-  $("pcode").textContent = "EAN "+code;
+  logScan(code, p, r);
   const img=$("pimg");
   if(p.image_front_small_url){ img.src=p.image_front_small_url; img.style.display="block"; }
   else{ img.style.display="none"; }
+  renderResult(r, {
+    name: p.product_name || "Unnamed product",
+    brand: p.brands || "",
+    code: "EAN "+code,
+    envGrade: (p.environmental_score_grade || p.ecoscore_grade || "").toLowerCase()
+  });
+}
+
+function renderResult(r, meta){
+  const g = gradeFor(r.score);
+
+  $("pname").textContent = meta.name || "";
+  $("pbrand").textContent = meta.brand || "";
+  $("pcode").textContent = meta.code || "";
 
   const stamp=$("stamp");
   stamp.style.setProperty("--stampcol", g.c);
@@ -465,6 +711,12 @@ function render(code, p){
   const srcInfo = SOURCES[r.src] || SOURCES.off;
   $("signal").innerHTML = "<b>Signal: "+r.signal+".</b> "+r.detail+
     '<div class="prov">Grade drawn from: <a href="'+srcInfo.url+'" target="_blank" rel="noopener">'+srcInfo.label+'</a></div>';
+
+  // Calculation trace
+  const tl = $("traceList");
+  tl.innerHTML = (r.trace||[]).map(step =>
+    '<li class="'+(step.t==="Final"?"final":"")+'"><b>'+step.t+'.</b> '+step.d+'</li>'
+  ).join("");
 
   if(r.pain && PAIN_NOTES[r.pain]){
     const pn = PAIN_NOTES[r.pain];
@@ -479,7 +731,7 @@ function render(code, p){
     $("pain").style.display="none";
   }
 
-  const eg = (p.environmental_score_grade || p.ecoscore_grade || "").toLowerCase();
+  const eg = meta.envGrade;
   const envEl=$("envgrade");
   if(eg && ENV_COLORS[eg]){
     envEl.textContent = eg.toUpperCase();
@@ -489,6 +741,7 @@ function render(code, p){
     envEl.style.background="#9AA593";
   }
 
+  $("errBox").style.display="none";
   $("result").style.display="block";
   $("result").scrollIntoView({behavior:"smooth",block:"start"});
 }
@@ -533,6 +786,81 @@ $("codeInput").addEventListener("keydown", e=>{ if(e.key==="Enter") lookup($("co
 document.querySelectorAll(".chip").forEach(ch=>{
   ch.addEventListener("click", ()=>{ $("codeInput").value=ch.dataset.code; lookup(ch.dataset.code); });
 });
+
+/* ----- Manual entry ----- */
+$("manualToggle").addEventListener("click", ()=>{
+  $("manualBox").classList.toggle("open");
+});
+$("manualGo").addEventListener("click", ()=>{
+  const sp = $("mSpecies").value;
+  const lb = $("mLabel").value;
+  const r = scoreFromManual(sp, lb);
+  $("pimg").style.display="none";
+  const spName = $("mSpecies").selectedOptions[0].text;
+  renderResult(r, {name: spName, brand:"Manual entry", code:"No barcode", envGrade:""});
+  logScan("manual:"+sp+":"+(lb||"none"), {product_name:spName}, r);
+});
+
+/* ----- Photo: identify product (Gemini via proxy) or read label (OCR fallback) ----- */
+function fileToDataURL(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.onerror=()=>rej(r.error||new Error("read failed"));
+    r.readAsDataURL(file);
+  });
+}
+
+$("photoInput").addEventListener("change", async (e)=>{
+  const file = e.target.files && e.target.files[0];
+  if(!file) return;
+  $("errBox").style.display="none";
+  $("result").style.display="none";
+  const useVision = typeof VISION_PROXY_URL==="string" && VISION_PROXY_URL.startsWith("https://");
+  $("status").innerHTML='<span class="pulse"></span><br>'+(useVision?"Identifying the product…":"Reading the label… (first time can take a moment)");
+  $("status").style.display="block";
+
+  try{
+    if(useVision){
+      const dataUrl = await fileToDataURL(file);
+      const resp = await fetch(VISION_PROXY_URL, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ image:dataUrl, mime:file.type })
+      });
+      const info = await resp.json();
+      $("status").style.display="none";
+      if(info.error) throw new Error(info.error);
+      const combined = [info.product_name, info.animal_type, (info.welfare_labels||[]).join(" ")].join(" ");
+      const r = scoreFromText(combined);
+      const lbls = (info.welfare_labels||[]).length ? " · labels seen: "+info.welfare_labels.join(", ") : " · no welfare label seen";
+      r.trace.splice(1,0,{t:"Vision read", d:"Identified \""+(info.product_name||"unnamed")+"\""+lbls});
+      $("pimg").style.display="none";
+      renderResult(r, {name: info.product_name||"Photo of product", brand:"Identified from photo (AI)", code:"No barcode", envGrade:""});
+      logScan("vision", {product_name:info.product_name||"photo"}, r);
+      return;
+    }
+
+    // Fallback: on-device OCR reads the printed label text
+    if(!window.Tesseract) throw new Error("ocr-unavailable");
+    const { data } = await Tesseract.recognize(file, "eng");
+    const text = (data && data.text) ? data.text : "";
+    $("status").style.display="none";
+    if(text.trim().length < 3){
+      showErr("Couldn't read any text from that photo. Try a sharper, well-lit shot of the label, or use \"Tell Ethiq\" to enter it by hand.");
+      return;
+    }
+    const r = scoreFromText(text);
+    r.trace.splice(1,0,{t:"Text read", d:'"'+text.replace(/\s+/g," ").trim().slice(0,90)+(text.length>90?"…":"")+'"'});
+    $("pimg").style.display="none";
+    renderResult(r, {name:"Label photo", brand:"Read from packaging (experimental)", code:"No barcode", envGrade:""});
+    logScan("photo-ocr", {product_name:"label photo"}, r);
+  }catch(err){
+    $("status").style.display="none";
+    showErr("Couldn't read that photo just now. You can still scan a barcode or use \"Tell Ethiq\" to enter the product by hand.");
+  }
+});
+
 </script>
 </body>
 </html>
